@@ -100,4 +100,100 @@ document.addEventListener('DOMContentLoaded', function () {
             contactForm.reset();
         }, 1000);
     });
+
+    // Services Scroller Logic
+    const container = document.getElementById('services-scroll-container');
+    const track = document.getElementById('services-track');
+    const dotsContainer = document.getElementById('pagination-dots');
+
+    if (container && track && dotsContainer) {
+        // Configuration
+        const originalCardCount = 5;
+        let scrollSpeed = 1; // px per tick
+        let isPaused = false;
+        let autoScrollId;
+
+        // Generate Dots
+        for (let i = 0; i < originalCardCount; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'w-2 h-2 rounded-full transition-all duration-300 bg-neutral-800 hover:bg-red-500';
+            dot.ariaLabel = 'Go to slide ' + (i + 1);
+
+            dot.addEventListener('click', function () {
+                const card = track.children[0];
+                const gap = 24; // tailwind gap-6 is 1.5rem = 24px
+                const cardWidth = card.offsetWidth + gap;
+
+                container.scrollTo({
+                    left: i * cardWidth,
+                    behavior: 'smooth'
+                });
+
+                updateActiveDot(i);
+            });
+
+            dotsContainer.appendChild(dot);
+        }
+
+        // Update Active Dot based on scroll position
+        function updateActiveDot(forceIndex) {
+            const dots = dotsContainer.children;
+            let activeIndex = forceIndex;
+
+            if (activeIndex === undefined || activeIndex === null) {
+                const card = track.children[0];
+                const gap = 24;
+                const cardWidth = card.offsetWidth + gap;
+                activeIndex = Math.round(container.scrollLeft / cardWidth) % originalCardCount;
+            }
+
+            for (let j = 0; j < dots.length; j++) {
+                if (j === activeIndex) {
+                    dots[j].classList.remove('bg-neutral-800');
+                    dots[j].classList.add('bg-red-500', 'scale-125');
+                } else {
+                    dots[j].classList.add('bg-neutral-800');
+                    dots[j].classList.remove('bg-red-500', 'scale-125');
+                }
+            }
+        }
+
+        // Auto Scroll Logic
+        function startAutoScroll() {
+            if (autoScrollId) return;
+
+            autoScrollId = setInterval(function () {
+                if (!isPaused) {
+                    const maxScroll = track.scrollWidth / 2;
+
+                    if (container.scrollLeft >= maxScroll) {
+                        container.scrollLeft = 0;
+                    } else {
+                        container.scrollLeft += scrollSpeed;
+                    }
+                }
+            }, 20);
+        }
+
+        // Interaction Handlers
+        container.addEventListener('mouseenter', function () { isPaused = true; });
+        container.addEventListener('mouseleave', function () { isPaused = false; });
+        dotsContainer.addEventListener('mouseenter', function () { isPaused = true; });
+        dotsContainer.addEventListener('mouseleave', function () { isPaused = false; });
+
+        // Handle manual scroll (touch/wheel) to pause temporarily
+        container.addEventListener('touchstart', function () { isPaused = true; });
+        container.addEventListener('touchend', function () {
+            setTimeout(function () { isPaused = false; }, 2000);
+        });
+
+        // Initialize
+        startAutoScroll();
+        updateActiveDot(0);
+
+        // Update dots on scroll event
+        container.addEventListener('scroll', function () {
+            updateActiveDot();
+        });
+    }
 });
