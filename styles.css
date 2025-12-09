@@ -158,8 +158,6 @@ html {
     display: flex;
     width: max-content;
     /* Ensure container is as wide as its children */
-    animation: scroll-left 40s linear infinite;
-    /* Adjust speed here (40s) */
 }
 
 /* Pause animation on hover */
