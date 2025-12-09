@@ -254,12 +254,9 @@
                     <p class="text-gray-400 mb-8 leading-relaxed">
                         Essa <strong class="text-white">precisão e prontidão para a ação</strong> estão refletidas na
                         nossa
-                        identidade: nossa metodologia espelha o <span class="text-red-500">olhar de um gato</span>.
-                        Preciso, ágil e sempre focado, pronto
-                        para a intervenção no momento exato.
-                    </p>
-                    <p class="text-gray-400 mb-8 leading-relaxed">
-                        Estamos constantemente vigilantes
+                        identidade: nossa metodologia espelha o <span class="text-red-500">olhar de um gato</span> –
+                        preciso, ágil e sempre focado, pronto
+                        para a intervenção no momento exato. Estamos constantemente vigilantes
                         para identificar vulnerabilidades e resolver problemas antes que eles causem impactos,
                         transformando a detecção em ação imediata.
                     </p>
@@ -408,8 +405,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <span class="font-mono text-red-500 text-sm tracking-widest uppercase">Entregas</span>
-                <h2 id="services-heading" class="text-4xl font-bold mt-2 text-white"><span class="text-red-600">/</span>
-                    O Que Fazemos</h2>
+                <h2 id="services-heading" class="text-4xl font-bold mt-2 text-white">O Que Fazemos</h2>
             </div>
 
             <!-- Horizontal Scroll Container -->
@@ -820,44 +816,6 @@
         </div>
     </section>
 
-    <!-- Parceiros Section -->
-    <section id="parceiros" class="py-10 bg-black relative overflow-hidden" aria-labelledby="parceiros-heading">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <!-- Title -->
-            <h2 id="parceiros-heading" class="text-3xl md:text-4xl font-bold mb-2">
-                <span class="text-red-600">/</span> PARCEIRO
-            </h2>
-
-            <!-- Logo Carousel -->
-            <div class="relative w-full overflow-hidden no-scrollbar py-4">
-                <div id="clients-track" class="flex items-center justify-center gap-16 animate-scroll-clients">
-                    <!-- Original logos -->
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <!-- Duplicated for seamless scroll -->
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                    <img src="limitis logo.png" alt="Limitis"
-                        class="h-12 md:h-16 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300">
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Contact Section -->
     <section id="contact" class="py-24 bg-black relative" aria-labelledby="contact-heading">
         <div class="max-w-4xl mx-auto px-4">
@@ -1019,6 +977,111 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <!-- Scroller Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('services-scroll-container');
+            const track = document.getElementById('services-track');
+            const dotsContainer = document.getElementById('pagination-dots');
+
+            // Configuration
+            const originalCardCount = 5;
+            let scrollSpeed = 1; // px per tick
+            let isPaused = false;
+            let autoScrollId;
+
+            // Generate Dots
+            for (let i = 0; i < originalCardCount; i++) {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-300 bg-neutral-800 hover:bg-red-500`;
+                dot.ariaLabel = `Go to slide ${i + 1}`;
+
+                dot.addEventListener('click', () => {
+                    // Calculate position: Card Width (including gap) * index
+                    // We assume first card width + gap. 
+                    const card = track.children[0];
+                    const gap = 24; // tailwind gap-6 is 1.5rem = 24px
+                    const cardWidth = card.offsetWidth + gap;
+
+                    container.scrollTo({
+                        left: i * cardWidth,
+                        behavior: 'smooth'
+                    });
+
+                    updateActiveDot(i);
+                });
+
+                dotsContainer.appendChild(dot);
+            }
+
+            // Update Active Dot based on scroll position
+            function updateActiveDot(forceIndex = null) {
+                const dots = dotsContainer.children;
+                let activeIndex = forceIndex;
+
+                if (activeIndex === null) {
+                    const card = track.children[0];
+                    const gap = 24;
+                    const cardWidth = card.offsetWidth + gap;
+                    activeIndex = Math.round(container.scrollLeft / cardWidth) % originalCardCount;
+                }
+
+                for (let i = 0; i < dots.length; i++) {
+                    if (i === activeIndex) {
+                        dots[i].classList.remove('bg-neutral-800');
+                        dots[i].classList.add('bg-red-500', 'scale-125');
+                    } else {
+                        dots[i].classList.add('bg-neutral-800');
+                        dots[i].classList.remove('bg-red-500', 'scale-125');
+                    }
+                }
+            }
+
+            // Auto Scroll Logic
+            function startAutoScroll() {
+                if (autoScrollId) return;
+
+                autoScrollId = setInterval(() => {
+                    if (!isPaused) {
+                        const maxScroll = track.scrollWidth / 2; // Split point since duplicated
+
+                        if (container.scrollLeft >= maxScroll) {
+                            // Seamless loop: reset to 0
+                            container.scrollLeft = 0;
+                        } else {
+                            container.scrollLeft += scrollSpeed;
+                        }
+
+                        // Optional: Update dots while scrolling (might be distinct visual noise, but keeps sync)
+                        // updateActiveDot(); 
+                    }
+                }, 20); // 50fps
+            }
+
+            // Interaction Handlers
+            container.addEventListener('mouseenter', () => isPaused = true);
+            container.addEventListener('mouseleave', () => isPaused = false);
+            dotsContainer.addEventListener('mouseenter', () => isPaused = true);
+            dotsContainer.addEventListener('mouseleave', () => isPaused = false);
+
+            // Handle manual scroll (touch/wheel) to pause temporarily
+            container.addEventListener('touchstart', () => isPaused = true);
+            container.addEventListener('touchend', () => {
+                setTimeout(() => isPaused = false, 2000); // Resume after 2s
+            });
+
+            // Initialize
+            startAutoScroll();
+            updateActiveDot(0);
+
+            // Update dots on scroll event (throttled/debounced ideally, but direct for responsiveness)
+            container.addEventListener('scroll', () => {
+                // Determine functionality - if auto scrolling, maybe don't update constantly? 
+                // Let's update constantly for "intuitiveness"
+                updateActiveDot();
+            });
+        });
+    </script>
 </body>
 
 </html>
