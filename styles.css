@@ -65,48 +65,58 @@ html {
     0% {
         text-shadow: none;
     }
+
     10% {
         transform: translate(-3px, -3px);
         text-shadow: 3px 3px 0 var(--color-secondary);
     }
+
     20% {
         transform: translate(-6px, -6px);
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary);
     }
+
     30% {
         transform: translate(-9px, -9px);
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary), 9px 9px var(--color-quaternary);
     }
+
     40% {
         transform: translate(-12px, -12px);
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary), 9px 9px var(--color-quaternary),
             12px 12px 0 var(--color-quinary);
     }
+
     50% {
         transform: translate(-12px, -12px);
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary), 9px 9px var(--color-quaternary),
             12px 12px 0 var(--color-quinary);
     }
+
     60% {
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary), 9px 9px var(--color-quaternary),
             12px 12px 0 var(--color-quinary);
     }
+
     70% {
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary), 9px 9px var(--color-quaternary);
     }
+
     80% {
         text-shadow: 3px 3px 0 var(--color-secondary),
             6px 6px 0 var(--color-tertiary);
     }
+
     90% {
         text-shadow: 3px 3px 0 var(--color-secondary);
     }
+
     100% {
         text-shadow: none;
     }
@@ -116,6 +126,7 @@ html {
     0% {
         bottom: 100%;
     }
+
     100% {
         bottom: -100%;
     }
@@ -129,4 +140,51 @@ html {
     -webkit-backdrop-filter: blur(12px);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+}
+
+/* Horizontal Scroll Animation */
+@keyframes scroll-left {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        /* Move by half the width (because we duplicated the items) */
+        transform: translateX(-50%);
+    }
+}
+
+.animate-scroll {
+    display: flex;
+    width: max-content;
+    /* Ensure container is as wide as its children */
+    animation: scroll-left 40s linear infinite;
+    /* Adjust speed here (40s) */
+}
+
+/* Pause animation on hover */
+.animate-scroll:hover {
+    animation-play-state: paused;
+}
+
+/* Hide scrollbar for the container */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Scroll Offset for Fixed Navbar */
+section {
+    scroll-margin-top: 120px;
+}
+
+/* Center Methodology on screen when clicked */
+#methodology {
+    scroll-margin-top: 35vh;
 }
